@@ -2,6 +2,10 @@
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 cout << rng() << endl;
 shuffle(permutation.begin(), permutation.end(), rng);
+ld rand(ld a, ld b) {
+    uniform_real_distribution<ld> uni(a, b);
+    return uni(rng);
+}
 // while TLE
 double t = clock(), TLE = 3;
 while((clock() - t) / CLOCKS_PER_SEC < TLE);
