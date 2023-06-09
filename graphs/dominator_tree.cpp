@@ -1,6 +1,6 @@
 //idom[i]=parent of i in dominator tree with root=rt, or -1 if not exists
 int n,rnk[tam],pre[tam],anc[tam],idom[tam],semi[tam],low[tam];
-vector<int> g[tam],rev[tam],dom[tam],ord;
+vi g[tam],rev[tam],dom[tam],ord;
 void dfspre(int pos){
 	rnk[pos]=sz(ord); ord.pb(pos);
 	for(auto x:g[pos]){
