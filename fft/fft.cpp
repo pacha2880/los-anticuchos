@@ -2,6 +2,10 @@
 // MOD-1 needs to be a multiple of MAXN !!
 // big mod and primitive root for NTT:
 typedef ll tf;
+tf addmod(tf a, tf b){tf r=a+b;if(r>=MOD)r-=MOD;return r;}
+tf submod(tf a, tf b){tf r=a-b;if(r<0)r+=MOD;return r;}
+tf mulmod(ll a, ll b){return a*b%MOD;}
+tf inv(tf a){return pot(a,MOD-2);}
 typedef vector<tf> poly;
 const tf MOD=2305843009255636993,RT=5;
 // FFT
@@ -28,8 +32,8 @@ CD operator+(const CD& a, const CD& b){return CD(addmod(a.x,b.x));}
 CD operator-(const CD& a, const CD& b){return CD(submod(a.x,b.x));}
 vector<tf> rts(MAXN+9,-1);
 CD root(int n, bool inv){
-	tf r=rts[n]<0?rts[n]=pm(RT,(MOD-1)/n):rts[n];
-	return CD(inv?pm(r,MOD-2):r);
+	tf r=rts[n]<0?rts[n]=pot(RT,(MOD-1)/n):rts[n];
+	return CD(inv?pot(r,MOD-2):r);
 }
 */
 CD cp1[MAXN+9],cp2[MAXN+9];
@@ -49,7 +53,7 @@ void dft(CD* a, int n, bool inv){
 	}
 	if(inv)fore(i,0,n)a[i]/=n; // FFT
 	//if(inv){ // NTT
-	//	CD z(pm(n,MOD-2)); // pm: modular exponentiation
+	//	CD z(pot(n,MOD-2)); // pot: modular exponentiation
 	//	fore(i,0,n)a[i]=a[i]*z;
 	//}
 }
