@@ -1,27 +1,43 @@
 // MAXN must be power of 2 !!
 // MOD-1 needs to be a multiple of MAXN !!
 // big mod and primitive root for NTT:
+// MAXN must be power of 2 !!
+// MOD-1 needs to be a multiple of MAXN !!
+// big mod and primitive root for NTT:
+int pot(int b, int e)
+{
+  int res = 1;
+  while(e)
+  {
+    if(e & 1) res = res * b % MOD;
+    b = b * b % MOD;
+    e /= 2;
+  }
+  return res;
+}
+const int MAXN = 1<<20;
 typedef ll tf;
 tf addmod(tf a, tf b){tf r=a+b;if(r>=MOD)r-=MOD;return r;}
 tf submod(tf a, tf b){tf r=a-b;if(r<0)r+=MOD;return r;}
 tf mulmod(ll a, ll b){return a*b%MOD;}
 tf inv(tf a){return pot(a,MOD-2);}
 typedef vector<tf> poly;
-const tf MOD=2305843009255636993,RT=5;
+const tf MOD=998244353, RT=3;
+// const tf MOD=2305843009255636993,RT=5;
 // FFT
-struct CD {
-	double r,i;
-	CD(double r=0, double i=0):r(r),i(i){}
-	double real()const{return r;}
-	void operator/=(const int c){r/=c, i/=c;}
-};
-CD operator*(const CD& a, const CD& b){
-	return CD(a.r*b.r-a.i*b.i,a.r*b.i+a.i*b.r);}
-CD operator+(const CD& a, const CD& b){return CD(a.r+b.r,a.i+b.i);}
-CD operator-(const CD& a, const CD& b){return CD(a.r-b.r,a.i-b.i);}
-const double pi=acos(-1.0);
+// struct CD {
+// 	double r,i;
+// 	CD(double r=0, double i=0):r(r),i(i){}
+// 	double real()const{return r;}
+// 	void operator/=(const int c){r/=c, i/=c;}
+// };
+// CD operator*(const CD& a, const CD& b){
+// 	return CD(a.r*b.r-a.i*b.i,a.r*b.i+a.i*b.r);}
+// CD operator+(const CD& a, const CD& b){return CD(a.r+b.r,a.i+b.i);}
+// CD operator-(const CD& a, const CD& b){return CD(a.r-b.r,a.i-b.i);}
+// const double pi=acos(-1.0);
 // NTT
-/*
+
 struct CD {
 	tf x;
 	CD(tf x):x(x){}
@@ -35,15 +51,15 @@ CD root(int n, bool inv){
 	tf r=rts[n]<0?rts[n]=pot(RT,(MOD-1)/n):rts[n];
 	return CD(inv?pot(r,MOD-2):r);
 }
-*/
+
 CD cp1[MAXN+9],cp2[MAXN+9];
 int R[MAXN+9];
 void dft(CD* a, int n, bool inv){
 	fore(i,0,n)if(R[i]<i)swap(a[R[i]],a[i]);
 	for(int m=2;m<=n;m*=2){
-		double z=2*pi/m*(inv?-1:1); // FFT
-		CD wi=CD(cos(z),sin(z)); // FFT
-		// CD wi=root(m,inv); // NTT
+		// double z=2*pi/m*(inv?-1:1); // FFT
+		// CD wi=CD(cos(z),sin(z)); // FFT
+		CD wi=root(m,inv); // NTT
 		for(int j=0;j<n;j+=m){
 			CD w(1);
 			for(int k=j,k2=j+m/2;k2<j+m;k++,k2++){
@@ -51,11 +67,11 @@ void dft(CD* a, int n, bool inv){
 			}
 		}
 	}
-	if(inv)fore(i,0,n)a[i]/=n; // FFT
-	//if(inv){ // NTT
-	//	CD z(pot(n,MOD-2)); // pot: modular exponentiation
-	//	fore(i,0,n)a[i]=a[i]*z;
-	//}
+	// if(inv)fore(i,0,n)a[i]/=n; // FFT
+	if(inv){ // NTT
+		CD z(pot(n,MOD-2)); // pot: modular exponentiation
+		fore(i,0,n)a[i]=a[i]*z;
+	}
 }
 poly multiply(poly& p1, poly& p2){
 	int n=p1.size()+p2.size()+1;
@@ -70,7 +86,7 @@ poly multiply(poly& p1, poly& p2){
 	dft(cp1,m,true);
 	poly res;
 	n-=2;
-	fore(i,0,n)res.pb((tf)floor(cp1[i].real()+0.5)); // FFT
-	//fore(i,0,n)res.pb(cp1[i].x); // NTT
+	// fore(i,0,n)res.pb((tf)floor(cp1[i].real()+0.5)); // FFT
+	fore(i,0,n)res.pb(cp1[i].x); // NTT
 	return res;
 }
