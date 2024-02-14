@@ -1,3 +1,7 @@
+// kth term of linear recurrence 
+// of size m a_i = sum(a_(i-j)*p_j)
+// f(x) = x^m - sum(x^(m-j)*p_j)
+// g(x^k) = g(x^k mod f)
 typedef vector<vector<ll> > Matrix;
 Matrix ones(int n) {
   Matrix r(n,vector<ll>(n));
