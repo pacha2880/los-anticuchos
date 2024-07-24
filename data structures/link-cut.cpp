@@ -11,17 +11,17 @@ struct Node_t{
   bool rev;
   Node_t *c[2], *p;
   Node_t(int v) : sz(1), nVal(v), tVal(v), d(N_DEL), rev(0), p(0){
-    c[0]=c[1]=0;
+  c[0]=c[1]=0;
   }
   bool isRoot(){return !p || (p->c[0] != this && p->c[1] != this);}
   void push(){
-    if(rev){
-      rev=0; swap(c[0], c[1]);
-      fore(x,0,2)if(c[x])c[x]->rev^=1;
-    }
-    nVal=joinVD(nVal, d); tVal=joinVD(tVal, dOnSeg(d, sz));
-    fore(x,0,2)if(c[x])c[x]->d=joinD(c[x]->d, d);
-    d=N_DEL;
+  if(rev){
+    rev=0; swap(c[0], c[1]);
+    fore(x,0,2)if(c[x])c[x]->rev^=1;
+  }
+  nVal=joinVD(nVal, d); tVal=joinVD(tVal, dOnSeg(d, sz));
+  fore(x,0,2)if(c[x])c[x]->d=joinD(c[x]->d, d);
+  d=N_DEL;
   }
   void upd();
 };
@@ -42,11 +42,11 @@ void rotate(Node x){
 }
 void spa(Node x){//splay
   while(!x->isRoot()){
-    Node p = x->p, g = p->p;
-    if(!p->isRoot())g->push();
-    p->push(); x->push();
-    if(!p->isRoot())rotate((x==p->c[0])==(p==g->c[0])? p : x);
-    rotate(x);
+  Node p = x->p, g = p->p;
+  if(!p->isRoot())g->push();
+  p->push(); x->push();
+  if(!p->isRoot())rotate((x==p->c[0])==(p==g->c[0])? p : x);
+  rotate(x);
   }
   x->push(); x->upd();
 }
@@ -63,23 +63,23 @@ bool connected(Node x, Node y){exv(x);exv(y); return x==y?1:x->p!=0;}
 void link(Node x, Node y){mkR(x); x->p=y;}
 void cut(Node x, Node y){mkR(x); exv(y); y->c[1]->p=0; y->c[1]=0;}
 Node father(Node x){
-	exv(x);
-	Node r=x->c[1];
-	if(!r)return 0;
-	while(r->c[0])r=r->c[0];
-	return r;
+  exv(x);
+  Node r=x->c[1];
+  if(!r)return 0;
+  while(r->c[0])r=r->c[0];
+  return r;
 }
 void cut(Node x){ // cuts x from father keeping tree root
-	exv(father(x));x->p=0;}
+  exv(father(x));x->p=0;}
 int query(Node x, Node y){mkR(x); exv(y); return getPV(y);}
 void modify(Node x, Node y, int d){mkR(x);exv(y);y->d=joinD(y->d,d);}
 Node lift_rec(Node x, int t){
-	if(!x)return 0;
-	if(t==getSize(x->c[0])){spa(x);return x;}
-	if(t<getSize(x->c[0]))return lift_rec(x->c[0],t);
-	return lift_rec(x->c[1],t-getSize(x->c[0])-1);
+  if(!x)return 0;
+  if(t==getSize(x->c[0])){spa(x);return x;}
+  if(t<getSize(x->c[0]))return lift_rec(x->c[0],t);
+  return lift_rec(x->c[1],t-getSize(x->c[0])-1);
 }
 Node lift(Node x, int t){ // t-th ancestor of x (lift(x,1) is x's father)
-	exv(x);return lift_rec(x,t);}
+  exv(x);return lift_rec(x,t);}
 int depth(Node x){ // distance from x to its tree root
-	exv(x);return getSize(x)-1;}
+  exv(x);return getSize(x)-1;}
