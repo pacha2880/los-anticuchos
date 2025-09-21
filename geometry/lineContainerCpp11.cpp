@@ -1,4 +1,5 @@
 bool Q = 0;
+const ll inf = LLONG_MAX;
 struct Line {
     mutable ll m, b, x;
 
