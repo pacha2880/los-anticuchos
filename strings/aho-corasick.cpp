@@ -9,7 +9,7 @@ void add(string &s, int pos) {
   for(char ch : s) {
     ch -= 'a';
     if(t[node].go[ch] == -1)
-      t[node].go[ch] = t.size(); t.emplace_back(ch, node);
+      t[node].go[ch] = t.size(), t.emplace_back(ch, node);
     node = t[node].go[ch];
   }
   t[node].leaf = 1;
